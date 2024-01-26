@@ -1,6 +1,41 @@
 //importo bootstrap
 @import "~bootstrap/scss/bootstrap";
+@import "_partials/variables.scss";
+@import "_partials/reset.scss";
 
-// body {
-//     background-image: url("../img/page_bg.jpg");
-// }
+header {
+    height: 120px;
+
+    .container {
+        @include container;
+        height: 100%;
+    }
+
+    img {
+        width: 80px;
+    }
+
+    nav {
+        height: 100%;
+
+        ul {
+            height: 100%;
+            gap: 35px;
+            text-transform: uppercase;
+            font-weight: bold;
+            li {
+                height: 100%;
+
+                a {
+                    height: 100%;
+
+                    &:hover {
+                        border-bottom: 5px solid $blue-primary;
+                        border-top: 5px solid transparent;
+                        color: $blue-primary;
+                    }
+                }
+            }
+        }
+    }
+}
