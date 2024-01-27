@@ -12,13 +12,13 @@
                 @foreach ($comics as $comic)
                     <div class="element">
                         <div class="image">
-                            <img src="{{ Vite::asset($comic['thumb']) }}" alt="{{ $comic['title'] }}">
+                            <img src="{{ $comic['thumb'] }}" alt="{{ $comic['title'] }}">
                         </div>
                         <div class="text">{{ $comic['title'] }}</div>
                     </div>
                 @endforeach
             </div>
-            <button class="btn btn-main text-uppercase">Load More</button>
+            <button class="btns btn-main text-uppercase">Load More</button>
         </div>
     </section>
 @endsection
