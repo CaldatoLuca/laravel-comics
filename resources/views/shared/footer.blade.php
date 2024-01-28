@@ -29,6 +29,7 @@ $icons = [
 ?>
 
 <footer>
+    {{-- icone --}}
     <section class="icons-section">
         <div class="container">
             <ul class="d-flex justify-content-between">
@@ -44,6 +45,7 @@ $icons = [
         </div>
     </section>
 
+    {{-- links --}}
     <section class="link-section">
         <div class="container d-flex">
             <div>
@@ -101,6 +103,7 @@ $icons = [
         </div>
     </section>
 
+    {{-- icone socials --}}
     <section class="socials-section">
         <div class="container d-flex justify-content-between align-items-center">
             <button class="btns btn-footer text-uppercase">Sign-up Now!</button>
