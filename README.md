@@ -1,41 +1,97 @@
-# Laravel Template
+# Laravel Comics
 
-## Creazione
+Create un nuovo progetto Laravel. Concentratevi sul layout: create un file di layout in cui inserire la struttura comune di tutte le pagine del sito web (tag head, tag body, ...) eventualmente includendo header e footer tramite due partials.
 
--   installazione di npm (`npm install`)
+Create poi una rotta per visualizzare la lista di tutti i fumetti recuperati da un file inserito nella cartella config e abbellite il tutto sfruttando Sass.
 
--   installazione di SASS (`npm i --save-dev sass`)
+## Creazione del layout
 
--   rinomino i file correttamente (da css a sass) anche in vite.config.js (dove creo anche un alias)
+Per non ripetere lo stesso codice vado a creare un layout principale che andrò a riutilizzare per le pagine del sito web.
 
--   importo il file scss nel progetto (`import "~resources/scss/app.scss";`) in app.js
+La struttura che si andrà a ripetere presenta un header e un footer pressochè identici per ogni pagina, dunque questi due saranno inclusi nel layout condiviso (`include('shared.header` e `include('shared.footer`).
 
--   includo nell' head il file app.js (`@vite('resources/js/app.js')`)
+Il main invece sarà personalizzato per ogni pagina, da qui il comando `@yeald('main)`.
 
--   indichiamo dove prendere le img (`import.meta.glob(["../img/**"]);`) in app.js
+Nel layout includeo anche il file js, da cui partono tutte le inclusioni dei file necessari (Js, Sass, Bootstrap ...), ` @vite('resources/js/app.js')`.
 
--   nel template si vede come usare le img in html e scss
+## Creazione delle parti condivise
 
--   installo Bootstrap (`npm i --save bootstrap @popperjs/core`)
+### Header
 
--   aggiungo la costante path (`import path from "path";`) in vite.config.js
+L' Header presenta il logo e la navigazione tramite links.
 
--   do un alias a bootsrap (`"~bootstrap": path.resolve(__dirname, "node_modules/bootstrap"),`)
+Tramite `route` decido a che pagina rimandare per ogni link, per questini di comodità ho impostato il logo come link alla Home mentre tutti gli altri link mandano alla pagina prodotto.
 
--   importo il css di Bootstrap (`@import "~bootstrap/scss/bootstrap";`) in app.scss
+```html
+{{-- logo --}}
+<a href="{{ route('home') }}">
+    <img src="{{ Vite::asset('resources/img/dc-logo.png') }}" alt="Logo" />
+</a>
+```
 
--   importo il js di Bootsrap (`import * as bootstrap from "bootstrap";`) in app.js
+```html
+@foreach ($links as $link)
+<li>
+    <a href="{{ route('prodotto') }}" class="d-flex align-items-center"
+        >{{ $link['name'] }}</a
+    >
+</li>
+@endforeach
+```
 
-## Utilizzo
+Queste le due route del sito, a cui ho assegnato un name.
 
--   usare questo template in fase di creazione di una nuova repository
+```php
+Route::get('/', function () {
 
--   clonare il progetto (`git clone ...`)
+    $data = [
+        "comics" => config('comicsdb')
+    ];
 
--   runnare il comando `composer install`
+    return view('welcome', $data);
+})->name('home');
 
--   copiare il file '.env.example' e creare un file uguale '.env'
+Route::get('/product', function () {
+    return view('product');
+})->name('prodotto');
+```
 
--   generare 'app key' via bottone o tramite `php artisan key:generate`
+### Footer
 
--   runnare su un altro terminale `npm install`
+Il Footer non presenta nessuna nuova funzionalità, è un semplice compia e incolla del codice già creato nel vecchio progetto [vite-comics](https://github.com/CaldatoLuca/vite-comics)
+
+## Creazione della pagina welcome
+
+La funzionalità principale di questa pagina è l' ottenimento di dati da un file esterno 'comicsdb.php'.
+
+Questo è possibile perchè passo alla pagina, tramite route, il dato desiderato.
+
+```php
+Route::get('/', function () {
+
+    $data = [
+        "comics" => config('comicsdb')
+    ];
+
+    return view('welcome', $data);
+})->name('home');
+```
+
+Creo un array di dati (`$data`) a cui passo come primo argomento un ulteriore array che chiamo 'comics'.
+
+Dentro 'comics' inserisco il contenuto del file 'comicsdb', un retrun di un array di fumetti.
+
+Passo poi il dato nel `return view(... , $data)
+
+Posso quindi fare un 'foreach' per visualizzare i dati in pagina
+
+```html
+@foreach ($comics as $comic)
+<div class="element">
+    <div class="image">
+        <img src="{{ $comic['thumb'] }}" alt="{{ $comic['title'] }}" />
+    </div>
+    <div class="text">{{ $comic['title'] }}</div>
+</div>
+@endforeach
+```
